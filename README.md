@@ -3,9 +3,12 @@
 仿iOS的AlertViewController
 几乎完美还原iOS 的 AlertViewController ，同时支持Alert和ActionSheet模式，每一个细节都是精雕细琢，并把api封装成懒到极致模式，一行代码就可以进行弹窗.
    
-      支持设置距离底部margin值（为沉浸式准备的）setMarginBottom
+      支持设置距离底部margin值（为沉浸式准备的）setPaddingBottom
       设置alter下面两个按钮点击中间线距离上下位置setDivierMargin
       设置中心弹窗的内容与按钮分割线是否中断（主要是针对俩按钮的设置了中间分割线距离顶部和底部距离的两种方案）alterDivide
+      支持设置取消（中心弹窗底部左边）按钮颜色，与大小.setLeftOrCancelColor(getResources().getColor(android.R.color.holo_purple);.setLeftOrCancelSize(25);
+      支持设置确定（中心弹窗底部右边）按钮颜色.setAlertRightColor(getResources().getColor(android.R.color.holo_red_dark));.setAlertRightSize
+
 
 ## Demo
 ![](https://github.com/lizhanqi/Android-AlertView/blob/master/preview/alertviewdemo.gif)
@@ -91,6 +94,8 @@ new AlertView("标题", "内容", null, new String[]{"确定"}, null, this,
     <color name="bgColor_divier">#d7d7db</color>
     <!--取消按钮颜色-->
     <color name="textColor_alert_button_cancel">#007aff</color>
+    <!--确定按钮颜色-->
+    <color name="textColor_alert_button_confirm">#5ac921</color>
     <!--高亮按钮颜色-->
     <color name="textColor_alert_button_destructive">#ff3b30</color>
     <!--普通按钮文字颜色-->
@@ -99,10 +104,10 @@ new AlertView("标题", "内容", null, new String[]{"确定"}, null, this,
     <color name="bgColor_alert_button_press">#EAEAEA</color>
     <!--actionsheet模式的取消按钮背景颜色-->
     <color name="bgColor_actionsheet_cancel_nor">#ffffff</color> ```
-    
+
     
     感谢：https://github.com/saiwu-bigkoo/Android-AlertView
     这个是在其基础上新增一个属性alert_divier_margin,
-    以及方法setDivierMargin  setMarginBottom  alterDivide三个方法
+    以及方法setDivierMargin  setPaddingBottom  alterDivide三个方法
 
 

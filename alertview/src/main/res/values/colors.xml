@@ -13,8 +13,10 @@
     <color name="textColor_actionsheet_msg">#8f8f8f</color>
     <!--线条颜色-->
     <color name="bgColor_divier">#d7d7db</color>
-    <!--取消按钮颜色-->
+    <!--取消（中心弹窗底下左边）按钮颜色-->
     <color name="textColor_alert_button_cancel">#007aff</color>
+    <!--确定（中心弹窗底下右边）按钮颜色-->
+    <color name="textColor_alert_button_right">#5ac921</color>
     <!--高亮按钮颜色-->
     <color name="textColor_alert_button_destructive">#ff3b30</color>
     <!--普通按钮文字颜色-->

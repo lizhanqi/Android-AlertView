@@ -30,6 +30,10 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
         setContentView(R.layout.activity_main);
         imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         mAlertView = new AlertView("标题", "内容", "取消", new String[]{"确定"}, null, this, AlertView.Style.ALERT, this).setCancelable(true).setOnDismissListener(this);
+        mAlertView.setLeftOrCancelColor(getResources().getColor(android.R.color.holo_red_dark));
+        mAlertView.setAlertRightColor(30);
+        mAlertView.setLeftOrCancelSize(25);
+        mAlertView.setAlertRightColor(getResources().getColor(android.R.color.tab_indicator_text));
         //拓展窗口
         mAlertViewExt = new AlertView("提示", "请完善你的个人资料！", "取消", null, new String[]{"完成"}, this, AlertView.Style.ALERT, this);
         ViewGroup extView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.alertext_form,null);
@@ -51,7 +55,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
     }
 
     public void alertShow2(View view) {
-        new AlertView("标题", "内容", null, new String[]{"确定"}, null, this, AlertView.Style.ALERT, this).show();
+        new AlertView("标题", "内容", null, new String[]{"确定","111"}, null, this, AlertView.Style.ALERT, this).show();
     }
 
     public void alertShow3(View view) {
@@ -66,13 +70,13 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
     }
 
     public void alertShow5(View view) {
-        new AlertView("标题", "内容", "取消", null, null, this, AlertView.Style.ACTIONSHEET, this).setCancelable(true).show();
+        new AlertView("标题", "内容", "取消", null, null, this, AlertView.Style.ACTIONSHEET, this).setCancelable(true).setLeftOrCancelSize(25).setLeftOrCancelColor(getResources().getColor(android.R.color.holo_purple)).show();
     }
 
     public void alertShow6(View view) {
         new AlertView("上传头像", null, "取消", null,
                 new String[]{"拍照", "从相册中选择"},
-                this, AlertView.Style.ACTIONSHEET, this).show();
+                this, AlertView.Style.ACTIONSHEET, this).setLeftOrCancelSize(25).setLeftOrCancelColor(getResources().getColor(android.R.color.holo_purple)).show();
     }
 
     public void alertShowExt(View view) {

@@ -2,7 +2,6 @@ package com.bigkoo.alertview;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -164,6 +163,8 @@ public class AlertView {
             tvAlertMsg.setVisibility(View.GONE);
         }
     }
+
+
     protected void initListView(){
         Context context = contextWeak.get();
         if(context == null) {return;}
@@ -172,13 +173,12 @@ public class AlertView {
         //把cancel作为footerView
         if(cancel != null && style == Style.ALERT){
             View itemView = LayoutInflater.from(context).inflate(R.layout.item_alertbutton, null);
-            TextView tvAlert = (TextView) itemView.findViewById(R.id.tvAlert);
-            tvAlert.setText(cancel);
-            tvAlert.setClickable(true);
-            tvAlert.setTypeface(Typeface.DEFAULT_BOLD);
-            tvAlert.setTextColor(context.getResources().getColor(R.color.textColor_alert_button_cancel));
-            tvAlert.setBackgroundResource(R.drawable.bg_alertbutton_bottom);
-            tvAlert.setOnClickListener(new OnTextClickListener(CANCELPOSITION));
+            tvAlertCancel = (TextView) itemView.findViewById(R.id.tvAlert);
+            tvAlertCancel.setText(cancel);
+            tvAlertCancel.setClickable(true);
+            setLeftOrCancelColor( context.getResources().getColor(R.color.textColor_alert_button_cancel));
+            tvAlertCancel.setBackgroundResource(R.drawable.bg_alertbutton_bottom);
+            tvAlertCancel.setOnClickListener(new OnTextClickListener(CANCELPOSITION));
             alertButtonListView.addFooterView(itemView);
         }
         AlertViewAdapter adapter = new AlertViewAdapter(mDatas,mDestructive);
@@ -191,19 +191,18 @@ public class AlertView {
             }
         });
     }
+    TextView tvActionSheetCancel;
     protected void initActionSheetViews(LayoutInflater layoutInflater) {
         ViewGroup viewGroup = (ViewGroup) layoutInflater.inflate(R.layout.layout_alertview_actionsheet,contentContainer);
         initHeaderView(viewGroup);
-
         initListView();
-        TextView tvAlertCancel = (TextView) contentContainer.findViewById(R.id.tvAlertCancel);
+         tvActionSheetCancel = (TextView) contentContainer.findViewById(R.id.tvAlertCancel);
         if(cancel != null){
-            tvAlertCancel.setVisibility(View.VISIBLE);
-            tvAlertCancel.setText(cancel);
+            tvActionSheetCancel.setVisibility(View.VISIBLE);
+            tvActionSheetCancel.setText(cancel);
         }
-        tvAlertCancel.setOnClickListener(new OnTextClickListener(CANCELPOSITION));
+        tvActionSheetCancel.setOnClickListener(new OnTextClickListener(CANCELPOSITION));
     }
-
     /**
      * 设置alter下面两个按钮点击中间线距离上下位置
      * @param mDivierMargin
@@ -228,6 +227,62 @@ public class AlertView {
         this .centerBreak=centerBreak;
         return this;
     }
+    TextView tvAlertConfirm;
+    /**
+     *中心弹窗左边按钮的颜色
+     */
+    public AlertView setAlertRightColor( int mColor){
+        if (tvAlertConfirm!=null){
+            tvAlertConfirm.setTextColor(mColor);
+        }
+        return this;
+    }
+    /**
+     *中心弹窗左边按钮的文字大小
+     */
+    public AlertView setAlertRightSize(int mSize){
+        if (tvAlertConfirm!=null){
+            tvAlertConfirm.setTextSize(mSize);
+        }
+        return this;
+    }
+    TextView tvAlertCancel;
+    /**
+     *中心弹窗取消按钮的颜色
+     */
+    public AlertView setLeftOrCancelColor(int mColor){
+                if(  style ==Style.ACTIONSHEET){
+                    if (tvActionSheetCancel!=null){
+                        tvActionSheetCancel.setTextColor(mColor);
+                    }
+                }else {
+                    if (tvAlertCancel!=null){
+                        tvAlertCancel.setTextColor(mColor);
+                    }
+                }
+
+        return this;
+    }
+    /**
+     *取消按钮的文字大小
+     */
+        public AlertView setLeftOrCancelSize(int mSize){
+        if(  style ==Style.ACTIONSHEET){
+            if (tvActionSheetCancel!=null){
+                tvActionSheetCancel.setTextSize(mSize);
+            }
+        }else {
+            if (tvAlertCancel!=null){
+                tvAlertCancel.setTextSize(mSize);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * 初始化中心弹窗
+     * @param layoutInflater
+     */
     protected void initAlertViews(LayoutInflater layoutInflater) {
         Context context = contextWeak.get();
         if(context == null) {return;}
@@ -242,7 +297,7 @@ public class AlertView {
                 ViewStub viewStub = (ViewStub) contentContainer.findViewById(R.id.viewStubHorizontal);
                 viewStub.inflate();
             LinearLayout loAlertButtons = (LinearLayout) contentContainer.findViewById(R.id.loAlertButtons);
-            for (int i = 0; i < mDatas.size(); i ++) {
+                for (int i = 0; i < mDatas.size(); i ++) {
                 //如果不是第一个按钮
                 if (i != 0){
                     //添加上按钮之间的分割线
@@ -270,19 +325,19 @@ public class AlertView {
                 }
                 String data = mDatas.get(i);
                 tvAlert.setText(data);
-
-                //取消按钮的样式
-                if (data == cancel){
-                    tvAlert.setTypeface(Typeface.DEFAULT_BOLD);
-                    tvAlert.setTextColor(context.getResources().getColor(R.color.textColor_alert_button_cancel));
+                //取消按钮的样式默认第0个也就是左边是取消
+                if (i == 0){
+                    //tvAlert.setTypeface(Typeface.DEFAULT_BOLD);
+                    tvAlertCancel=tvAlert;
+                    setLeftOrCancelColor(context.getResources().getColor(R.color.textColor_alert_button_cancel));
                     tvAlert.setOnClickListener(new OnTextClickListener(CANCELPOSITION));
                     position = position - 1;
                 }
-                //高亮按钮的样式
+                //取消按钮的样式
                 else if (mDestructive!= null && mDestructive.contains(data)){
-                    tvAlert.setTextColor(context.getResources().getColor(R.color.textColor_alert_button_destructive));
+                    tvAlertConfirm=tvAlert;
+                    setAlertRightColor(context.getResources().getColor(R.color.textColor_alert_button_right));
                 }
-
                 tvAlert.setOnClickListener(new OnTextClickListener(position));
                 position++;
                 loAlertButtons.addView(itemView,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,

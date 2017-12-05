@@ -19,7 +19,7 @@
     <dimen name="size_divier">1dp</dimen>
     <!--按钮的高度-->
     <dimen name="height_alert_button">48dp</dimen>
-    <!--按钮文字大小-->
+    <!--按钮文字大小确定和取消通用-->
     <dimen name="textSize_alert_button">18sp</dimen>
     <!--圆角-->
     <dimen name="radius_alertview">15px</dimen>
