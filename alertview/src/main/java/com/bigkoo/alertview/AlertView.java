@@ -112,14 +112,30 @@ public class AlertView {
         }
 
     }
-
     /**
      * 设置距离底部距离（这个是为沉浸式准备的如果当前页面是虚拟导航栏的，直接吧虚拟导航栏的高度给过来就行了）
+     *@deprecated use {@link # setContentContainerMarginBottom(int)} {@link #  steadsetContentContainerMargins(int ,int,int,int);
      * @param paddingBottom
      * @return
      */
+    @Deprecated
     public AlertView setPaddingBottom(int  paddingBottom){
+        if (rootView==null){
+            return  null;
+        }
         rootView.setPadding(0,0,0,paddingBottom);
+        return this;
+    }
+
+    /**
+     * 设置内容距离缩进
+     * @return
+     */
+    public AlertView setContentContainerPadding(int  l,int t,int r,int b){
+        if (contentContainer==null){
+            return null;
+        }
+        contentContainer.setPadding(l,t,r,b);
         return this;
     }
 
@@ -131,7 +147,20 @@ public class AlertView {
      * @param b
      */
     public AlertView setContentContainerMargins(int l,int t,int r,int b){
+        if(params == null||contentContainer==null) {return null;}
         params.setMargins(l,t,r,b);
+        contentContainer.setLayoutParams(params);
+        return this;
+    }
+
+    /**
+     * 设置距离底部距离（沉浸式）
+     * @param margin
+     * @return
+     */
+    public AlertView setContentContainerMarginBottom(int margin){
+        if(params == null||contentContainer==null) {return null;}
+        params.setMargins(params.leftMargin,params.topMargin,params.rightMargin,params.bottomMargin+margin);
         contentContainer.setLayoutParams(params);
         return this;
     }
@@ -544,15 +573,31 @@ public class AlertView {
     };
     /**
      * 主要用于拓展View的时候有输入框，键盘弹出则设置MarginBottom往上顶，避免输入法挡住界面
+     *  例如：
+     *    etName = (EditText) extView.findViewById(R.id.etName);
+      *   etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+     *    @Override
+     *   public void onFocusChange(View view, boolean focus) {
+     *  //输入框出来则往上移动
+     *   boolean isOpen=imm.isActive();
+     *   mAlertViewExt.setMarginBottom(isOpen&&focus ? 240 :0);
+     *  System.out.println(isOpen);
+     *   }
+     *  });
+     *  mAlertViewExt.addExtView(extView);
+     *    private void closeKeyboard() {
+     * //关闭软键盘
+     * imm.hideSoftInputFromWindow(etName.getWindowToken(),0);
+     * //恢复位置
+     * mAlertViewExt.setMarginBottom(0);
+     * }
      */
     public void setMarginBottom(int marginBottom){
-        Context context = contextWeak.get();
-        if(context == null) {return;}
-
-        int margin_alert_left_right = context.getResources().getDimensionPixelSize(R.dimen.margin_alert_left_right);
-        params.setMargins(margin_alert_left_right,0,margin_alert_left_right,marginBottom);
-        contentContainer.setLayoutParams(params);
+       setContentContainerMarginBottom(marginBottom);
     }
+
+
+
     public AlertView setCancelable(boolean isCancelable) {
         View view = rootView.findViewById(R.id.outmost_container);
 

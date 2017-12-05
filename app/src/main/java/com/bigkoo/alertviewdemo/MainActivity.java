@@ -29,7 +29,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        mAlertView = new AlertView("标题", "内容", "取消", new String[]{"确定"}, null, this, AlertView.Style.ALERT, this).setCancelable(true).setOnDismissListener(this);
+        mAlertView = new AlertView("标题", "内容", "取消", new String[]{"确定"}, null, this, AlertView.Style.ACTIONSHEET, this).setCancelable(true).setOnDismissListener(this);
 
 
         mAlertView.setLeftOrCancelColor(getResources().getColor(android.R.color.holo_red_dark));
@@ -50,7 +50,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
             public void onFocusChange(View view, boolean focus) {
                 //输入框出来则往上移动
                 boolean isOpen=imm.isActive();
-                mAlertViewExt.setMarginBottom(isOpen&&focus ? 120 :0);
+                mAlertViewExt.setMarginBottom(isOpen&&focus ? 240:0);
                 System.out.println(isOpen);
             }
         });
@@ -58,7 +58,14 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
     }
 
     public void alertShow1(View view) {
-        mAlertView.show();
+        AlertView alertView = new AlertView(null, null, null, null, null, this, AlertView.Style.ACTIONSHEET, null);
+        View inflate = getLayoutInflater().inflate(R.layout.pop_package_product_addbutton, null);
+        alertView.addExtView(inflate);
+//        alertView.setContentContainerPadding(300,0,0,0);
+        alertView.setContentContainerMargins(0,0,0,30);
+        alertView.setContainerBackgroundResource(R.color.bgColor_actionsheet_cancel_nor);
+        alertView.show();
+//        mAlertView.show();
     }
 
     public void alertShow2(View view) {
@@ -79,11 +86,13 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
     public void alertShow5(View view) {
         new AlertView("标题", "内容", "取消", null, null, this, AlertView.Style.ACTIONSHEET, this).setCancelable(true).setLeftOrCancelSize(25).setLeftOrCancelColor(getResources().getColor(android.R.color.holo_purple)).show();
     }
-
+    AlertView alertView;
     public void alertShow6(View view) {
-        new AlertView("上传头像", null, "取消", null,
+         alertView = new AlertView("上传头像", null, "取消", null,
                 new String[]{"拍照", "从相册中选择"},
-                this, AlertView.Style.ACTIONSHEET, this).setLeftOrCancelSize(25).setLeftOrCancelColor(getResources().getColor(android.R.color.holo_purple)).show();
+                this, AlertView.Style.ACTIONSHEET, this).setLeftOrCancelSize(25).setLeftOrCancelColor(getResources().getColor(android.R.color.holo_purple));
+        alertView.setMarginBottom(100);
+         alertView   .show();
     }
 
     public void alertShowExt(View view) {
