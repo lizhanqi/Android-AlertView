@@ -77,6 +77,9 @@ public class AlertView {
         init();
     }
     public    AlertView(String title, String msg, String cancel, String[] destructive, String[] others, Context context, Style style,OnItemClickListener onItemClickListener){
+        if (context==null){
+           throw  new IllegalArgumentException("参数错误，Context不能为空");
+        }
         this.contextWeak = new WeakReference<>(context);
         if(style != null){this.style = style;}
         this.onItemClickListener = onItemClickListener;
@@ -119,6 +122,25 @@ public class AlertView {
         rootView.setPadding(0,0,0,paddingBottom);
         return this;
     }
+
+    /**
+     *
+     * @param l
+     * @param t
+     * @param r
+     * @param b
+     */
+    public AlertView setContentContainerMargins(int l,int t,int r,int b){
+        params.setMargins(l,t,r,b);
+        contentContainer.setLayoutParams(params);
+        return this;
+    }
+
+    public AlertView setContainerBackgroundResource(int l){
+        contentContainer.setBackgroundResource(l);
+        return this;
+    }
+
     protected void initViews(){
         Context context = contextWeak.get();
         if(context == null){ return;}
@@ -412,6 +434,7 @@ public class AlertView {
      * @param extView
      * @return
      */
+
     public AlertView addExtView(View extView){
         loAlertHeader.addView(extView);
         return this;
@@ -568,7 +591,11 @@ public class AlertView {
         private OnItemClickListener onItemClickListener;
 
         public Builder setContext(Context context) {
+            if (context==null){
+                throw new IllegalArgumentException("参数错误，Context不能为空");
+            }
             this.context = context;
+
             return this;
         }
 

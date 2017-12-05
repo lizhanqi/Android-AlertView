@@ -30,10 +30,8 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
         setContentView(R.layout.activity_main);
         imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         mAlertView = new AlertView("标题", "内容", "取消", new String[]{"确定"}, null, this, AlertView.Style.ALERT, this).setCancelable(true).setOnDismissListener(this);
-        mAlertView.setTitleSize(30);
-        mAlertView.setTitleColor(getResources().getColor(android.R.color.holo_blue_light));
-        mAlertView.setMsgSize(20);
-        mAlertView.setMsgColor(getResources().getColor(android.R.color.holo_red_dark));
+
+
         mAlertView.setLeftOrCancelColor(getResources().getColor(android.R.color.holo_red_dark));
         mAlertView.setAlertRightColor(30);
         mAlertView.setLeftOrCancelSize(25);
