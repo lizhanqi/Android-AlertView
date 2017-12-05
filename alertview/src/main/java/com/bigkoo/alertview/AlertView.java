@@ -28,6 +28,9 @@ import java.util.List;
  */
 public class AlertView {
     private View divier;
+    private TextView tvAlertTitle;
+    private TextView tvAlertMsg;
+
     public enum Style{
         ACTIONSHEET,
         ALERT
@@ -147,11 +150,59 @@ public class AlertView {
                 break;
         }
     }
+
+    /**
+     * 设置标题大小
+     * @param mSize
+     * @return
+     */
+    public AlertView setTitleSize(int mSize){
+        if (tvAlertTitle!=null){
+            tvAlertTitle.setTextSize(mSize);
+        }
+        return this;
+    }
+
+    /**
+     * 设置标题颜色
+     * @param mColor
+     * @return
+     */
+    public AlertView setTitleColor(int mColor){
+        if (tvAlertTitle!=null){
+            tvAlertTitle.setTextColor(mColor);
+        }
+        return this;
+    }
+
+    /**
+     * 设置消息字体大小
+     * @param mSize
+     * @return
+     */
+    public AlertView setMsgSize(int mSize){
+        if (tvAlertMsg!=null){
+            tvAlertMsg.setTextSize(mSize);
+        }
+        return this;
+    }
+
+    /**
+     * 设置消息颜色
+     * @param mColor
+     * @return
+     */
+    public AlertView setMsgColor(int mColor){
+        if (tvAlertMsg!=null){
+            tvAlertMsg.setTextColor(mColor);
+        }
+        return this;
+    }
     protected void initHeaderView(ViewGroup viewGroup){
         loAlertHeader = (ViewGroup) viewGroup.findViewById(R.id.loAlertHeader);
         //标题和消息
-        TextView tvAlertTitle = (TextView) viewGroup.findViewById(R.id.tvAlertTitle);
-        TextView tvAlertMsg = (TextView) viewGroup.findViewById(R.id.tvAlertMsg);
+        tvAlertTitle = (TextView) viewGroup.findViewById(R.id.tvAlertTitle);
+        tvAlertMsg = (TextView) viewGroup.findViewById(R.id.tvAlertMsg);
         if(title != null) {
             tvAlertTitle.setText(title);
         }else{
