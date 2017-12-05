@@ -28,12 +28,10 @@ import java.util.List;
  * 点击取消按钮返回 －1，其他按钮从0开始算
  */
 public class AlertView {
-
     private View divier;
-
     public enum Style{
-        ActionSheet,
-        Alert
+        ACTIONSHEET,
+        ALERT
     }
     private final FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM
@@ -55,17 +53,13 @@ public class AlertView {
     private ViewGroup decorView;//activity的根View
     private ViewGroup rootView;//AlertView 的 根View
     private ViewGroup loAlertHeader;//窗口headerView
-
-    private Style style = Style.Alert;
-
+    private Style style = Style.ALERT;
     private OnDismissListener onDismissListener;
     private OnItemClickListener onItemClickListener;
     private boolean isShowing;
-
     private Animation outAnim;
     private Animation inAnim;
     private int gravity = Gravity.CENTER;
-
     public AlertView(Builder builder) {
         this.contextWeak = new WeakReference<>(builder.context);
         this.style = builder.style;
@@ -79,10 +73,8 @@ public class AlertView {
         initData(title, msg, cancel, destructive, others);
         initViews();
         init();
-        initEvents();
     }
-
-    public AlertView(String title, String msg, String cancel, String[] destructive, String[] others, Context context, Style style,OnItemClickListener onItemClickListener){
+    public    AlertView(String title, String msg, String cancel, String[] destructive, String[] others, Context context, Style style,OnItemClickListener onItemClickListener){
         this.contextWeak = new WeakReference<>(context);
         if(style != null){this.style = style;}
         this.onItemClickListener = onItemClickListener;
@@ -90,7 +82,6 @@ public class AlertView {
         initData(title, msg, cancel, destructive, others);
         initViews();
         init();
-        initEvents();
     }
 
     /**
@@ -110,7 +101,7 @@ public class AlertView {
         }
         if (cancel != null){
             this.cancel = cancel;
-            if(style == Style.Alert && mDatas.size() < HORIZONTAL_BUTTONS_MAXCOUNT){
+            if(style == Style.ALERT && mDatas.size() < HORIZONTAL_BUTTONS_MAXCOUNT){
                 this.mDatas.add(0,cancel);
             }
         }
@@ -119,13 +110,13 @@ public class AlertView {
 
     /**
      * 设置距离底部距离（这个是为沉浸式准备的如果当前页面是虚拟导航栏的，直接吧虚拟导航栏的高度给过来就行了）
-      * @param paddingBottom
+     * @param paddingBottom
      * @return
      */
     public AlertView setPaddingBottom(int  paddingBottom){
         rootView.setPadding(0,0,0,paddingBottom);
         return this;
-     }
+    }
     protected void initViews(){
         Context context = contextWeak.get();
         if(context == null){ return;}
@@ -135,10 +126,11 @@ public class AlertView {
         rootView.setLayoutParams(new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
         ));
-       contentContainer = (ViewGroup) rootView.findViewById(R.id.content_container);
+        contentContainer = (ViewGroup) rootView.findViewById(R.id.content_container);
         int margin_alert_left_right = 0;
         switch (style){
-            case ActionSheet:
+            default:
+            case ACTIONSHEET:
                 params.gravity = Gravity.BOTTOM;
                 margin_alert_left_right = context.getResources().getDimensionPixelSize(R.dimen.margin_actionsheet_left_right);
                 params.setMargins(margin_alert_left_right,0,margin_alert_left_right,margin_alert_left_right);
@@ -146,7 +138,7 @@ public class AlertView {
                 gravity = Gravity.BOTTOM;
                 initActionSheetViews(layoutInflater);
                 break;
-            case Alert:
+            case ALERT:
                 params.gravity = Gravity.CENTER;
                 margin_alert_left_right = context.getResources().getDimensionPixelSize(R.dimen.margin_alert_left_right);
                 params.setMargins(margin_alert_left_right,0,margin_alert_left_right,0);
@@ -178,7 +170,7 @@ public class AlertView {
 
         ListView alertButtonListView = (ListView) contentContainer.findViewById(R.id.alertButtonListView);
         //把cancel作为footerView
-        if(cancel != null && style == Style.Alert){
+        if(cancel != null && style == Style.ALERT){
             View itemView = LayoutInflater.from(context).inflate(R.layout.item_alertbutton, null);
             TextView tvAlert = (TextView) itemView.findViewById(R.id.tvAlert);
             tvAlert.setText(cancel);
@@ -225,20 +217,30 @@ public class AlertView {
         }
         return  this;
     }
-
-
+    boolean centerBreak;
+    /**
+     * 设置中心弹窗的内容与按钮分割线是否中断
+     * （主要是针对俩按钮的设置了中间分割线距离顶部和底部距离的两种方案）
+     * @param centerBreak
+     * @return
+     */
+    public AlertView alterDivide(boolean centerBreak){
+        this .centerBreak=centerBreak;
+        return this;
+    }
     protected void initAlertViews(LayoutInflater layoutInflater) {
         Context context = contextWeak.get();
         if(context == null) {return;}
-
         ViewGroup viewGroup = (ViewGroup) layoutInflater.inflate(R.layout.layout_alertview_alert, contentContainer);
+        if (!centerBreak){
+            viewGroup.findViewById(R.id.devideline).setVisibility(View.VISIBLE);
+        }
         initHeaderView(viewGroup);
-
         int position = 0;
         //如果总数据小于等于HORIZONTAL_BUTTONS_MAXCOUNT，则是横向button
         if(mDatas.size()<=HORIZONTAL_BUTTONS_MAXCOUNT){
-            ViewStub viewStub = (ViewStub) contentContainer.findViewById(R.id.viewStubHorizontal);
-            viewStub.inflate();
+                ViewStub viewStub = (ViewStub) contentContainer.findViewById(R.id.viewStubHorizontal);
+                viewStub.inflate();
             LinearLayout loAlertButtons = (LinearLayout) contentContainer.findViewById(R.id.loAlertButtons);
             for (int i = 0; i < mDatas.size(); i ++) {
                 //如果不是第一个按钮
@@ -247,13 +249,15 @@ public class AlertView {
                     divier = new View(context);
                     divier.setBackgroundColor(context.getResources().getColor(R.color.bgColor_divier));
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)context.getResources().getDimension(R.dimen.size_divier), LinearLayout.LayoutParams.MATCH_PARENT);
-                    setDivierMargin((int)context.getResources().getDimension(R.dimen.size_divier));
                     loAlertButtons.addView(divier,params);
+                    setDivierMargin((int)context.getResources().getDimension(R.dimen.alert_divier_margin));
                 }
                 View itemView = LayoutInflater.from(context).inflate(R.layout.item_alertbutton, null);
+                if (!centerBreak){
+                    itemView.findViewById(R.id.topline).setVisibility(View.GONE);
+                }
                 TextView tvAlert = (TextView) itemView.findViewById(R.id.tvAlert);
                 tvAlert.setClickable(true);
-
                 //设置点击效果
                 if(mDatas.size() == 1){
                     tvAlert.setBackgroundResource(R.drawable.bg_alertbutton_bottom);
@@ -284,6 +288,7 @@ public class AlertView {
                 loAlertButtons.addView(itemView,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT, 1));
             }
+
         }
         else{
             ViewStub viewStub = (ViewStub) contentContainer.findViewById(R.id.viewStubVertical);
@@ -295,8 +300,12 @@ public class AlertView {
         inAnim = getInAnimation();
         outAnim = getOutAnimation();
     }
-    protected void initEvents() {
-    }
+
+    /**
+     * 添加自定义view
+     * @param extView
+     * @return
+     */
     public AlertView addExtView(View extView){
         loAlertHeader.addView(extView);
         return this;
@@ -329,12 +338,18 @@ public class AlertView {
         return rootView.getParent() != null && isShowing;
     }
 
+    /**
+     * 关闭
+     */
     public void dismiss() {
         //消失动画
         outAnim.setAnimationListener(outAnimListener);
         contentContainer.startAnimation(outAnim);
     }
 
+    /**
+     * 直接关闭
+     */
     public void dismissImmediately() {
         decorView.removeView(rootView);
         isShowing = false;
@@ -360,6 +375,11 @@ public class AlertView {
         return AnimationUtils.loadAnimation(context, res);
     }
 
+    /**
+     * 设置关闭监听
+     * @param onDismissListener
+     * @return
+     */
     public AlertView setOnDismissListener(OnDismissListener onDismissListener) {
         this.onDismissListener = onDismissListener;
         return this;

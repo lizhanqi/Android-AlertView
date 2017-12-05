@@ -29,9 +29,9 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        mAlertView = new AlertView("标题", "内容", "取消", new String[]{"确定"}, null, this, AlertView.Style.Alert, this).setCancelable(true).setDivierMargin(30).setOnDismissListener(this);
+        mAlertView = new AlertView("标题", "内容", "取消", new String[]{"确定"}, null, this, AlertView.Style.ALERT, this).setCancelable(true).setOnDismissListener(this);
         //拓展窗口
-        mAlertViewExt = new AlertView("提示", "请完善你的个人资料！", "取消", null, new String[]{"完成"}, this, AlertView.Style.Alert, this);
+        mAlertViewExt = new AlertView("提示", "请完善你的个人资料！", "取消", null, new String[]{"完成"}, this, AlertView.Style.ALERT, this);
         ViewGroup extView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.alertext_form,null);
         etName = (EditText) extView.findViewById(R.id.etName);
         etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -49,28 +49,30 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
     public void alertShow1(View view) {
         mAlertView.show();
     }
+
     public void alertShow2(View view) {
-        new AlertView("标题", "内容", null, new String[]{"确定"}, null, this, AlertView.Style.Alert, this).show();
+        new AlertView("标题", "内容", null, new String[]{"确定"}, null, this, AlertView.Style.ALERT, this).show();
     }
+
     public void alertShow3(View view) {
         new AlertView(null, null, null, new String[]{"高亮按钮1", "高亮按钮2", "高亮按钮3"},
                 new String[]{"其他按钮1", "其他按钮2", "其他按钮3", "其他按钮4", "其他按钮5", "其他按钮6",
                         "其他按钮7", "其他按钮8", "其他按钮9", "其他按钮10", "其他按钮11", "其他按钮12"},
-                this, AlertView.Style.Alert, this).setPaddingBottom(50).show();
+                this, AlertView.Style.ALERT, this).show();
     }
 
     public void alertShow4(View view) {
-        new AlertView("标题", null, "取消", new String[]{"高亮按钮1"}, new String[]{"其他按钮1", "其他按钮2", "其他按钮3"}, this, AlertView.Style.ActionSheet, this).show();
+        new AlertView("标题", null, "取消", new String[]{"高亮按钮1"}, new String[]{"其他按钮1", "其他按钮2", "其他按钮3"}, this, AlertView.Style.ACTIONSHEET, this).show();
     }
 
     public void alertShow5(View view) {
-        new AlertView("标题", "内容", "取消", null, null, this, AlertView.Style.ActionSheet, this).setCancelable(true).show();
+        new AlertView("标题", "内容", "取消", null, null, this, AlertView.Style.ACTIONSHEET, this).setCancelable(true).show();
     }
 
     public void alertShow6(View view) {
         new AlertView("上传头像", null, "取消", null,
                 new String[]{"拍照", "从相册中选择"},
-                this, AlertView.Style.ActionSheet, this).show();
+                this, AlertView.Style.ACTIONSHEET, this).show();
     }
 
     public void alertShowExt(View view) {

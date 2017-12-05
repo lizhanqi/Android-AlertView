@@ -3,6 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <View
+        android:id="@+id/topline"
         android:layout_width="match_parent"
         android:background="@color/bgColor_divier"
         android:layout_height="@dimen/size_divier"/>

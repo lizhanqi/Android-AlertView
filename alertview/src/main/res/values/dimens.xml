@@ -23,5 +23,7 @@
     <dimen name="textSize_alert_button">18sp</dimen>
     <!--圆角-->
     <dimen name="radius_alertview">15px</dimen>
+    <!--设置中心弹窗底部两个按钮分割线距离顶部和底部距离-->
+    <dimen name="alert_divier_margin">0px</dimen>
 
 </resources>
