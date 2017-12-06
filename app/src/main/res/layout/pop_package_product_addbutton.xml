@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:clickable="true"
     android:orientation="vertical"
     android:paddingLeft="60px"
     android:paddingRight="60px"
@@ -9,6 +10,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <Button
+        android:id="@+id/aac"
         android:text="222"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

@@ -33,7 +33,8 @@ public class AlertView {
 
     public enum Style{
         ACTIONSHEET,
-        ALERT
+        ALERT,
+        ACTIONTOP,
     }
     private final FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM
@@ -169,6 +170,14 @@ public class AlertView {
         contentContainer.setBackgroundResource(l);
         return this;
     }
+    public AlertView setRootViewMarginBootom(int bootom){
+            if (rootView!=null){
+                rootParam.bottomMargin=bootom;
+                rootView.setLayoutParams(rootParam);
+            }
+        return this;
+    }
+    FrameLayout.LayoutParams rootParam= new FrameLayout.LayoutParams( ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT );
 
     protected void initViews(){
         Context context = contextWeak.get();
@@ -176,9 +185,8 @@ public class AlertView {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         decorView = (ViewGroup) ((Activity)context).getWindow().getDecorView().findViewById(android.R.id.content);
         rootView = (ViewGroup) layoutInflater.inflate(R.layout.layout_alertview, decorView, false);
-        rootView.setLayoutParams(new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-        ));
+        rootView.setLayoutParams(rootParam);
+
         contentContainer = (ViewGroup) rootView.findViewById(R.id.content_container);
         int margin_alert_left_right = 0;
         switch (style){
@@ -189,6 +197,14 @@ public class AlertView {
                 params.setMargins(margin_alert_left_right,0,margin_alert_left_right,margin_alert_left_right);
                 contentContainer.setLayoutParams(params);
                 gravity = Gravity.BOTTOM;
+                initActionSheetViews(layoutInflater);
+                break;
+            case ACTIONTOP:
+                params.gravity = Gravity.TOP;
+                margin_alert_left_right = context.getResources().getDimensionPixelSize(R.dimen.margin_actionsheet_left_right);
+                params.setMargins(margin_alert_left_right,0,margin_alert_left_right,margin_alert_left_right);
+                contentContainer.setLayoutParams(params);
+                gravity = Gravity.TOP;
                 initActionSheetViews(layoutInflater);
                 break;
             case ALERT:
@@ -487,6 +503,38 @@ public class AlertView {
         }
         onAttached(rootView);
     }
+//    public void showViewTop(View view) {
+//        int[] location = new int[2];    view.getLocationOnScreen(location);
+//        WindowManager windowManager = (WindowManager) view.getContext().getSystemService(Context.WINDOW_SERVICE);
+//        Display display = windowManager.getDefaultDisplay();
+//        Point point = new Point();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+//                display.getSize(point);
+//                if (rootParam!=null){
+//                    rootParam.height= location[1]-rootParam.bottomMargin;
+//                    rootParam.bottomMargin=point.y - location[1]+rootParam.bottomMargin;
+//                }
+//                if (rootView!=null){
+//                    rootView.setLayoutParams(rootParam);
+//                }
+//        }else {
+//            if (rootParam!=null){
+//                rootParam.height= location[1]-rootParam.bottomMargin;
+//                rootParam.bottomMargin= display.getHeight() - location[1]+rootParam.bottomMargin;
+//            }
+//            if (rootView!=null){
+//                rootView.setLayoutParams(rootParam);
+//            }
+//        }
+//
+//        if (isShowing()) {
+//            return;
+//        }
+//        onAttached(rootView);
+//    }
+
+
+
     /**
      * 检测该View是不是已经添加到根视图
      *

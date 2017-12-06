@@ -37,7 +37,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
         mAlertView.setLeftOrCancelSize(25);
         mAlertView.setAlertRightColor(getResources().getColor(android.R.color.tab_indicator_text));
         //拓展窗口
-        mAlertViewExt = new AlertView("提示", "请完善你的个人资料！", "取消", null, new String[]{"完成"}, this, AlertView.Style.ALERT, this);
+        mAlertViewExt = new AlertView("提示", "请完善你的个人资料！", "取消", null, new String[]{"完成"}, this, AlertView.Style.ACTIONTOP, this);
         mAlertViewExt.setTitleSize(30);
         mAlertViewExt.setTitleColor(getResources().getColor(android.R.color.holo_blue_light));
         mAlertViewExt.setMsgSize(20);
@@ -57,14 +57,24 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
         mAlertViewExt.addExtView(extView);
     }
 
+    AlertView ac;
     public void alertShow1(View view) {
-        AlertView alertView = new AlertView(null, null, null, null, null, this, AlertView.Style.ACTIONSHEET, null);
+        ac= new AlertView(null, null, null, null, null, this, AlertView.Style.ACTIONSHEET, null);
+        ac.setCancelable(true);
+        ac.setContentContainerMargins(50,20,30,0);
+        ac.setContentContainerPadding(50,20,30,0);
+        ac.setRootViewMarginBootom(250);
+        ac.setContainerBackgroundResource(R.color.textColor_alert_button_destructive);
         View inflate = getLayoutInflater().inflate(R.layout.pop_package_product_addbutton, null);
-        alertView.addExtView(inflate);
+        inflate.findViewById(R.id.aac).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ac.dismiss();
+            }
+        });
+        ac.addExtView(inflate);
 //        alertView.setContentContainerPadding(300,0,0,0);
-        alertView.setContentContainerMargins(0,0,0,30);
-        alertView.setContainerBackgroundResource(R.color.bgColor_actionsheet_cancel_nor);
-        alertView.show();
+        ac.show();
 //        mAlertView.show();
     }
 
@@ -76,7 +86,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
         new AlertView(null, null, null, new String[]{"高亮按钮1", "高亮按钮2", "高亮按钮3"},
                 new String[]{"其他按钮1", "其他按钮2", "其他按钮3", "其他按钮4", "其他按钮5", "其他按钮6",
                         "其他按钮7", "其他按钮8", "其他按钮9", "其他按钮10", "其他按钮11", "其他按钮12"},
-                this, AlertView.Style.ALERT, this).show();
+                this, AlertView.Style.ALERT, this).setRootViewMarginBootom(300  ).show();
     }
 
     public void alertShow4(View view) {
