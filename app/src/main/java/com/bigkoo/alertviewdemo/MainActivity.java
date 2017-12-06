@@ -86,7 +86,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
         new AlertView(null, null, null, new String[]{"高亮按钮1", "高亮按钮2", "高亮按钮3"},
                 new String[]{"其他按钮1", "其他按钮2", "其他按钮3", "其他按钮4", "其他按钮5", "其他按钮6",
                         "其他按钮7", "其他按钮8", "其他按钮9", "其他按钮10", "其他按钮11", "其他按钮12"},
-                this, AlertView.Style.ALERT, this).setRootViewMarginBootom(300  ).show();
+                this, AlertView.Style.ALERT, this).setRootViewMarginBootom(300  ).setRootBackgroundResource(R.color.textColor_alert_button_destructive).show();
     }
 
     public void alertShow4(View view) {

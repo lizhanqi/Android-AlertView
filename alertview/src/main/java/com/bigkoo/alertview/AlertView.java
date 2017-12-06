@@ -165,7 +165,10 @@ public class AlertView {
         contentContainer.setLayoutParams(params);
         return this;
     }
-
+    public AlertView setRootBackgroundResource(int l){
+        rootView.setBackgroundResource(l);
+        return this;
+    }
     public AlertView setContainerBackgroundResource(int l){
         contentContainer.setBackgroundResource(l);
         return this;
