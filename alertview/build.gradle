@@ -16,7 +16,7 @@ android {
 }*/
 
 // 项目引用的版本号，比如compile 'com.yanzhenjie:andserver:1.0.1'中的1.0.1就是这里配置的。
-version = "1.0.6"
+version = "1.0.7"
 // 定义两个链接，下面会用到。
 def siteUrl = 'https://github.com/lizhanqi/Android-AlertView' // 项目主页。
 def gitUrl = 'https://github.com/lizhanqi/Android-AlertView.git' // Git仓库的url。
@@ -30,7 +30,7 @@ install {
                 packaging 'aar'
                 // 项目描述，复制我的话，这里需要修改。
                 name 'Android-AlertView For Android'// 可选，项目名称。
-                description '仿ios弹窗 view'// 可选，项目描述。
+                description '仿ios弹窗 view(支持系统级弹窗)'// 可选，项目描述。
                 url siteUrl // 项目主页，这里是引用上面定义好。
                 // 软件开源协议，现在一般都是Apache License2.0吧，复制我的，这里不需要修改。
                 licenses {
@@ -103,3 +103,8 @@ bintray {
         publish = true // 是否是公开项目。
     }
 }
+/**发布命令:
+ * 1.  gradle install    后看到BUILD SUCCESSFUL后，
+ * 2. 再输入上传命令  gradle bintrayUpload
+ *
+ * */

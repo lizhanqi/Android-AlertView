@@ -24,6 +24,8 @@
     <!--圆角-->
     <dimen name="radius_alertview">15px</dimen>
     <!--设置中心弹窗底部两个按钮分割线距离顶部和底部距离-->
-    <dimen name="alert_divier_margin">0px</dimen>
+    <dimen name="alert_divier_margin">0dp</dimen>
+    <!--系統性弹窗高度(建议不要太高,否则应用会成为流氓行为,建议可以使用触摸关闭弹窗,以及,多少秒后你自己关闭掉,不要长弹)-->
+    <dimen name="system_dialog_height">550dp</dimen>
 
 </resources>
