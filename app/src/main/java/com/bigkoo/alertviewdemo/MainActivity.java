@@ -58,35 +58,72 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
     }
 
     AlertView ac;
-    public void alertShow1(View view) {
-        ac= new AlertView(null, null, null, null, null, this, AlertView.Style.ACTIONSHEET, null);
+    public   void systemAalter(View view) {
+        ac= new AlertView.Builder(this).setStyle(AlertView.Style.SYSTEMTOP).build();
         ac.setCancelable(true);
-        ac.setContentContainerMargins(50,20,30,0);
-        ac.setContentContainerPadding(50,20,30,0);
-        ac.setRootViewMarginBootom(250);
-        ac.setContainerBackgroundResource(R.color.textColor_alert_button_destructive);
-        View inflate = getLayoutInflater().inflate(R.layout.pop_package_product_addbutton, null);
+        ac .setSystemDialogHeight(550);
+        ac.setRootViewHeightWrapContent();
+        ac.setContentContainerMargins(50,20,30,10);
+        ac.setContentContainerPadding(10,10,10,10);
+        ac.setSystemDialogHeight(200);
+//       ac.setContentContainerPadding(50,20,30,0);
+//       ac.setRootViewMarginBootom(250);
+        //ac.setContainerBackgroundResource(R.color.textColor_alert_button_destructive);
+        ac.setContainerBackgroundResource(0);
+        ac.setGotoSetting(new AlertView.GotoSetting() {
+            @Override
+            public void alreadToSetting() {
+
+            }
+        });
+        final View inflate = getLayoutInflater().inflate(R.layout.pop_package_product_addbutton, null);
         inflate.findViewById(R.id.aac).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ac.dismiss();
             }
         });
-        ac.addExtView(inflate);
-//        alertView.setContentContainerPadding(300,0,0,0);
-        ac.show();
-//        mAlertView.show();
+//         ac.autoDismiss(5000);
+        //ac.addExtView(inflate);
+        ac.showSystemAlert(inflate);
+        // ac.show();
     }
+    public void alertShow1(View view) {
+        ac= new AlertView.Builder(this).setStyle(AlertView.Style.ACTIONSHEET).build();
+        ac.setCancelable(true);
+        ac .setSystemDialogHeight(550);
+         ac.setRootViewHeightWrapContent();
+        ac.setContentContainerMargins(50,20,30,10);
+        ac.setContentContainerPadding(10,10,10,10);
+       ac.setSystemDialogHeight(200);
+//       ac.setContentContainerPadding(50,20,30,0);
+//       ac.setRootViewMarginBootom(250);
+       //ac.setContainerBackgroundResource(R.color.textColor_alert_button_destructive);
+//        ac.setContainerBackgroundResource(0);
+         final View inflate = getLayoutInflater().inflate(R.layout.pop_package_product_addbutton, null);
+         inflate.findViewById(R.id.aac).setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+             ac.dismiss();
+         }
+     });
+//         ac.autoDismiss(5000);
+        //ac.addExtView(inflate);
+        ac.showSystemAlert(inflate);
+        // ac.show();
+  }
+
+
 
     public void alertShow2(View view) {
-        new AlertView("标题", "内容", null, new String[]{"确定","111"}, null, this, AlertView.Style.ALERT, this).show();
+        new AlertView("标题", "内容", null, new String[]{"确定","111"}, null, this, AlertView.Style.ALERT, this).autoDismiss(2000).show();
     }
 
     public void alertShow3(View view) {
         new AlertView(null, null, null, new String[]{"高亮按钮1", "高亮按钮2", "高亮按钮3"},
                 new String[]{"其他按钮1", "其他按钮2", "其他按钮3", "其他按钮4", "其他按钮5", "其他按钮6",
                         "其他按钮7", "其他按钮8", "其他按钮9", "其他按钮10", "其他按钮11", "其他按钮12"},
-                this, AlertView.Style.ALERT, this).setRootViewMarginBootom(300  ).setRootBackgroundResource(R.color.textColor_alert_button_destructive).show();
+                this, AlertView.Style.ACTIONSHEET, this).show();
     }
 
     public void alertShow4(View view) {
@@ -97,17 +134,25 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
         new AlertView("标题", "内容", "取消", null, null, this, AlertView.Style.ACTIONSHEET, this).setCancelable(true).setLeftOrCancelSize(25).setLeftOrCancelColor(getResources().getColor(android.R.color.holo_purple)).show();
     }
     AlertView alertView;
+
     public void alertShow6(View view) {
          alertView = new AlertView("上传头像", null, "取消", null,
                 new String[]{"拍照", "从相册中选择"},
-                this, AlertView.Style.ACTIONSHEET, this).setLeftOrCancelSize(25).setLeftOrCancelColor(getResources().getColor(android.R.color.holo_purple));
+                this, AlertView.Style.ACTIONTOP, this).setLeftOrCancelSize(25).setLeftOrCancelColor(getResources().getColor(android.R.color.holo_purple));
         alertView.setMarginBottom(100);
+        //alertView.rootViewUseWrapContext();
          alertView   .show();
     }
 
+    /**
+     * 拓展
+     * @param view
+     */
     public void alertShowExt(View view) {
         mAlertViewExt.show();
     }
+
+
     private void closeKeyboard() {
         //关闭软键盘
         imm.hideSoftInputFromWindow(etName.getWindowToken(),0);
@@ -138,8 +183,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnDis
         Toast.makeText(this, "消失了", Toast.LENGTH_SHORT).show();
     }
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
+    public boolean onKeyDown(int keyCode, KeyEvent event)    {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
         {
             if(mAlertView!=null && mAlertView.isShowing()){

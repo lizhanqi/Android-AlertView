@@ -10,13 +10,15 @@ android {
         targetSdkVersion 21
     }
 }
-/*dependencies {
+dependencies {
+    //特殊权限(Special Permissions)兼容库
+    compile 'com.github.czy1121:settingscompat:1.1.4'
     // 如果你的library有依赖别的jar，这里要把jar依赖进来。
-    compile fileTree(dir: 'libs', includes: ['*.jar'])
-}*/
+    //compile fileTree(dir: 'libs', includes: ['*.jar'])
+}
 
 // 项目引用的版本号，比如compile 'com.yanzhenjie:andserver:1.0.1'中的1.0.1就是这里配置的。
-version = "1.0.7"
+version = "1.0.8"
 // 定义两个链接，下面会用到。
 def siteUrl = 'https://github.com/lizhanqi/Android-AlertView' // 项目主页。
 def gitUrl = 'https://github.com/lizhanqi/Android-AlertView.git' // Git仓库的url。

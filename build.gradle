@@ -17,7 +17,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-
+        maven { url "https://jitpack.io" }
     }
     //中文字符问题，包括注释（控制台输出不然乱码）
     tasks.withType(Javadoc) {

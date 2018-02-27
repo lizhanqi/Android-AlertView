@@ -2,13 +2,11 @@ package com.bigkoo.alertview;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -29,6 +27,9 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import ezy.assist.compat.SettingsCompat;
+
 /**
  * Created by Sai on 15/8/9.
  * 精仿iOSAlertViewController控件
@@ -239,27 +240,28 @@ public class AlertView {
     private void  attach2System  ( View view)    {
         tempView=view;
        windowManager = (WindowManager) view.getContext().getSystemService(Context.WINDOW_SERVICE);
-        final WindowManager.LayoutParams   params = new WindowManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        final WindowManager.LayoutParams   windowParams = new WindowManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         //这里设置的动画必须是系统的,不能是应用内的,这里是要求
-        params.windowAnimations= android.R.style.Animation_Translucent;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){//6.0
-             params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        windowParams.windowAnimations= android.R.style.Animation_Translucent;
+        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.M){//6.0
+            windowParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
          }else {
-             params.type =  WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+            windowParams.type =  WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
          }
       /* * 如果设置为params.type = WindowManager.LayoutParams.TYPE_PHONE; 那么优先级会降低一些,
         * 即拉下通知栏不可见         */
-        params.format = PixelFormat.RGBA_8888;
+        windowParams.format = PixelFormat.RGBA_8888;
         // 设置图片格式，效果为背景透明
         // 设置Window flag
-        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        windowParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
       /* * 下面的flags属性的效果形同“锁定”。 悬浮窗不可触摸，不接受任何事件,同时不影响后面的事件响应。
            * wmParams.flags=LayoutParams.FLAG_NOT_TOUCH_MODAL| LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_NOT_TOUCHABLE;
             * */
         // 设置悬浮窗的长得宽
-        params.height=systemDialogHeight;
+        windowParams.height=systemDialogHeight;
+        windowParams.gravity = Gravity.LEFT | Gravity. TOP;
 //         params.x=0;
-         params.y=-1080;
+        windowParams.y=-1080;
        /* btn_floatView.setOnTouchListener(new View.OnTouchListener() {
             int lastX, lastY;
             int paramX, paramY;
@@ -283,11 +285,18 @@ public class AlertView {
                 }                return true;
             }
         });*/
-        windowManager.addView(view, params);
+        try {
+            windowManager.addView(view, windowParams);
+        } catch (Exception e) {
+            windowParams.type =  WindowManager.LayoutParams.TYPE_TOAST;
+            windowManager.addView(view, windowParams);
+            e.printStackTrace();
+        }
         isShowing = true;
         if(autoDismissTime>0){
             hd.sendEmptyMessageDelayed(0,autoDismissTime);
         }
+        showOnSystemFailed=false;
     }
 
     /**
@@ -299,6 +308,19 @@ public class AlertView {
         autoDismissTime=time;
         return this;
     }
+    public interface GotoSetting{
+        public void  alreadToSetting();
+    }
+    GotoSetting gotoSetting;
+    public void setGotoSetting(GotoSetting gotoSetting) {
+        this.gotoSetting = gotoSetting;
+    }
+    boolean showOnSystemFailed;
+
+    public boolean isShowOnSystemFailed() {
+        return showOnSystemFailed;
+    }
+
     /**
      * 直接添加一个view展示到应用最上层,这里会绕过设置属性(这里全部就是你view了)
      * 与addExtView不同,都可以,如果使用addExtView,需要使用show
@@ -307,17 +329,18 @@ public class AlertView {
     public  void  showSystemAlert(View view){
         //权限判断
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(!Settings.canDrawOverlays(contextWeak.get())) {
-                //启动Activity让用户授权
-                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                contextWeak.get().startActivity(intent);
-                PackageManager pm = contextWeak.get().getPackageManager();
-                String appName = contextWeak.get().getApplicationInfo().loadLabel(pm).toString();
-                Toast.makeText(contextWeak.get(),appName+"需要在其他应用上层显示权限",Toast.LENGTH_LONG).show();
-                return;
-            } else {
-                //执行6.0以上绘制代码
-                attach2System(view);
+            if (SettingsCompat.canDrawOverlays(contextWeak.get())){
+                      attach2System(view);
+            }else {
+                  PackageManager pm = contextWeak.get().getPackageManager();
+                  String appName = contextWeak.get().getApplicationInfo().loadLabel(pm).toString();
+                   Toast.makeText(contextWeak.get(),appName+"需要在其他应用上层显示权限",Toast.LENGTH_LONG).show();
+                  // 跳转到悬浮窗权限设置页
+                  SettingsCompat.manageDrawOverlays(contextWeak.get());
+                  if (gotoSetting!=null){
+                      gotoSetting.alreadToSetting();
+                  }
+                showOnSystemFailed=true;
             }
         } else {
             //执行6.0以下绘制代码
