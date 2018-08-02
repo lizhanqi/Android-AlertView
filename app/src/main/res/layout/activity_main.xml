@@ -35,15 +35,12 @@
         android:layout_height="50dp"
         android:onClick="alertShow6"/>
     <Button android:text="窗口拓展点这里" android:layout_width="match_parent"
-
         android:layout_marginTop="5dp"
         android:layout_height="50dp"
         android:onClick="alertShowExt"/>
-
     <Button android:text="system_alter"
         android:layout_width="match_parent"
         android:layout_marginTop="5dp"
         android:layout_height="50dp"
         android:onClick="systemAalter"/>
-
 </LinearLayout>
